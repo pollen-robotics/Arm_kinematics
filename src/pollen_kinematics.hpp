@@ -1,8 +1,15 @@
 #ifndef ARM_KINEMATICS_H
 #define ARM_KINEMATICS_H
 
-extern "C" void setup(void);
-extern "C" int forward(double *q, int n, double *M);
-extern "C" int inverse(double *M, double *q);
+#if defined (_WIN32)
+#define EXPORT_MACRO __declspec(dllexport)
+#else
+#define EXPORT_MACRO 
+#endif
+
+
+extern "C" EXPORT_MACRO void setup(void);
+extern "C" EXPORT_MACRO int forward(double *q, int n, double *M);
+extern "C" EXPORT_MACRO int inverse(double *M, double *q);
 
 #endif // ARM_KINEMATICS

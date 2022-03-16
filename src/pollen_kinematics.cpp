@@ -81,7 +81,7 @@ int inverse(double *M, double *q)
 
     int retval = invkin->CartToJnt(q_init, pos_goal, q_sol);
 
-    for (uint i=0; i < n_joints; i++) {
+    for (int i=0; i < n_joints; i++) {
         q[i] = q_sol.data[i];
     }
 
