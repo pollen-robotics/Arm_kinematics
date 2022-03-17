@@ -9,7 +9,7 @@
 
 
 extern "C" EXPORT_MACRO void setup(void);
-extern "C" EXPORT_MACRO int forward(double *q, int n, double *M);
-extern "C" EXPORT_MACRO int inverse(double *M, double *q);
+extern "C" EXPORT_MACRO void forward(double *q, int n, double *M);
+extern "C" EXPORT_MACRO void inverse(double *M, double *q);
 
 #endif // ARM_KINEMATICS

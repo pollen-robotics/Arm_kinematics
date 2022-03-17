@@ -12,17 +12,14 @@ static int n_joints;
 
 void setup()
 {
-    chain = KDL::Puma560();
+    chain = KDL::Reachy();
     fwdkin = new KDL::ChainFkSolverPos_recursive(chain);
     invkin = new KDL::ChainIkSolverPos_LMA(chain);
     n_joints = chain.getNrOfJoints();
 }
 
-int forward(double *q, int n, double *M)
+void forward(double *q, int n, double *M)
 {
-    if (n != n_joints) {
-        return -1;
-    }
     KDL::JntArray Q(n);
     for (uint8_t i=0; i < n; i++) {
         Q.data[i] = q[i];
@@ -47,11 +44,9 @@ int forward(double *q, int n, double *M)
     M[13] = 0.0;
     M[14] = 0.0;
     M[15] = 1.0;
-
-    return retval;
 }
 
-int inverse(double *M, double *q)
+void inverse(double *M, double *q)
 {
     KDL::Frame pos_goal;
 
@@ -76,6 +71,7 @@ int inverse(double *M, double *q)
     q_init.data[3] = 0.0;
     q_init.data[4] = 0.0;
     q_init.data[5] = 0.0;
+    // q_init.data[6] = 0.0;
 
     KDL::JntArray q_sol(n_joints);
 
@@ -84,6 +80,4 @@ int inverse(double *M, double *q)
     for (int i=0; i < n_joints; i++) {
         q[i] = q_sol.data[i];
     }
-
-    return retval;
 }
