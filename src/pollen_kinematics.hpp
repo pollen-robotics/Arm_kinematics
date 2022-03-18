@@ -7,9 +7,10 @@
 #define EXPORT_MACRO 
 #endif
 
+enum ArmSide { Left, Right };
 
 extern "C" EXPORT_MACRO void setup(void);
-extern "C" EXPORT_MACRO void forward(double *q, int n, double *M);
-extern "C" EXPORT_MACRO void inverse(double *M, double *q);
+extern "C" EXPORT_MACRO void forward(ArmSide side, double *q, int n, double *M);
+extern "C" EXPORT_MACRO void inverse(ArmSide side, double *M, double *q);
 
 #endif // ARM_KINEMATICS
