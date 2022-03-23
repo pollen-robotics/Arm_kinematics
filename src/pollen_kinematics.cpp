@@ -5,31 +5,42 @@
 #include "kdl/chainiksolverpos_lma.hpp"
 #include "kdl/chainfksolverpos_recursive.hpp"
 
-static KDL::Chain chain;
-static KDL::ChainFkSolverPos_recursive *fwdkin;
-static KDL::ChainIkSolverPos_LMA *invkin;
+static KDL::Chain chain_right;
+static KDL::Chain chain_left;
+static KDL::ChainFkSolverPos_recursive *fwdkin_right;
+static KDL::ChainIkSolverPos_LMA *invkin_right;
+static KDL::ChainFkSolverPos_recursive *fwdkin_left;
+static KDL::ChainIkSolverPos_LMA *invkin_left;
 static int n_joints;
 
 void setup()
 {
-    chain = KDL::Puma560();
-    fwdkin = new KDL::ChainFkSolverPos_recursive(chain);
-    invkin = new KDL::ChainIkSolverPos_LMA(chain);
-    n_joints = chain.getNrOfJoints();
+    chain_right = KDL::Reachy_RightArm();
+    chain_left = KDL::Reachy_LeftArm();
+    fwdkin_right = new KDL::ChainFkSolverPos_recursive(chain_right);
+    fwdkin_left = new KDL::ChainFkSolverPos_recursive(chain_left);
+    invkin_right = new KDL::ChainIkSolverPos_LMA(chain_right);
+    invkin_left = new KDL::ChainIkSolverPos_LMA(chain_left);
+    n_joints = chain_right.getNrOfJoints();
 }
 
-int forward(double *q, int n, double *M)
+void forward(ArmSide side, double *q, int n, double *M)
 {
-    if (n != n_joints) {
-        return -1;
-    }
     KDL::JntArray Q(n);
     for (uint8_t i=0; i < n; i++) {
         Q.data[i] = q[i];
     }
 
     KDL::Frame pos_goal;
-    int retval = fwdkin->JntToCart(Q, pos_goal);
+
+    if(side == ArmSide::Right)
+    {
+        int retval = fwdkin_right->JntToCart(Q, pos_goal);
+    }
+    else
+    {
+        int retval = fwdkin_left->JntToCart(Q, pos_goal);
+    }
 
     M[0] = pos_goal.M.data[0];
     M[1] = pos_goal.M.data[1];
@@ -47,11 +58,9 @@ int forward(double *q, int n, double *M)
     M[13] = 0.0;
     M[14] = 0.0;
     M[15] = 1.0;
-
-    return retval;
 }
 
-int inverse(double *M, double *q)
+void inverse(ArmSide side, double *M, double *q)
 {
     KDL::Frame pos_goal;
 
@@ -76,14 +85,20 @@ int inverse(double *M, double *q)
     q_init.data[3] = 0.0;
     q_init.data[4] = 0.0;
     q_init.data[5] = 0.0;
+    q_init.data[6] = 0.0;
 
     KDL::JntArray q_sol(n_joints);
 
-    int retval = invkin->CartToJnt(q_init, pos_goal, q_sol);
+    if(side == ArmSide::Right)
+    {
+        int retval = invkin_right->CartToJnt(q_init, pos_goal, q_sol);
+    }
+    else
+    {
+        int retval = invkin_left->CartToJnt(q_init, pos_goal, q_sol);
+    }
 
     for (int i=0; i < n_joints; i++) {
         q[i] = q_sol.data[i];
     }
-
-    return retval;
 }

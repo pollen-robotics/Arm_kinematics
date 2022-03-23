@@ -27,6 +27,8 @@ namespace KDL{
 class Chain;
 
 Chain Puma560();
+Chain Reachy_RightArm();
+Chain Reachy_LeftArm();
 Chain KukaLWR();
 Chain KukaLWRsegment();
 Chain KukaLWR_DHnew();
