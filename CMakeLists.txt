@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(Arm_kinematics)
 
-include_directories(src/eigen-3.4.0)
+include_directories(src/eigen)
 include_directories(src/kdl)
 include_directories(src/kdl/utilities)
 
