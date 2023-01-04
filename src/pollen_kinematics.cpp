@@ -1,9 +1,9 @@
 #include "pollen_kinematics.hpp"
+#include "models.hpp"
 
-#include "kdl/chain.hpp"
-#include "kdl/models/models.hpp"
-#include "kdl/chainiksolverpos_lma.hpp"
-#include "kdl/chainfksolverpos_recursive.hpp"
+#include "orocos_kinematics_dynamics/orocos_kdl/src/chain.hpp"
+#include "orocos_kinematics_dynamics/orocos_kdl/src/chainiksolverpos_lma.hpp"
+#include "orocos_kinematics_dynamics/orocos_kdl/src/chainfksolverpos_recursive.hpp"
 
 static KDL::Chain chain_right;
 static KDL::Chain chain_left;
