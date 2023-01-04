@@ -5,6 +5,7 @@ To compile the lib
 git clone --recursive git@github.com:pollen-robotics/Arm_kinematics.git
 cd Arm_kinematics
 mkdir build
+cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j
 ```
